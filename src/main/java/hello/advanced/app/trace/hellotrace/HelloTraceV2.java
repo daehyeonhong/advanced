@@ -12,6 +12,14 @@ import static hello.advanced.app.common.enumerate.PREFIX.START_PREFIX;
 @Component
 public class HelloTraceV2 {
 
+    private static String addSpace(final String prefix, final int level) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < level; i++) {
+            stringBuilder.append((i == level - 1) ? "|" + prefix : "|    ");
+        }
+        return stringBuilder.toString();
+    }
+
     public TraceStatus begin(final String message) {
         final TraceId traceId = new TraceId();
         final long startTimeMillis = System.currentTimeMillis();
@@ -42,13 +50,5 @@ public class HelloTraceV2 {
         } else {
             log.info("[{}] {}{} time={}ms exception={}", traceId.getId(), addSpace(EXCEPTION_PREFIX.getValue(), traceId.getLevel()), traceStatus.getMessage(), resultTimeMillis, exception);
         }
-    }
-
-    private static String addSpace(final String prefix, final int level) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < level; i++) {
-            stringBuilder.append((i == level - 1) ? "|" + prefix : "|    ");
-        }
-        return stringBuilder.toString();
     }
 }

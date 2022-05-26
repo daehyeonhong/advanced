@@ -11,6 +11,14 @@ import static hello.advanced.app.common.enumerate.PREFIX.START_PREFIX;
 public class FieldLogTrace implements LogTrace {
     private TraceId traceIdHolder;
 
+    private static String addSpace(final String prefix, final int level) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < level; i++) {
+            stringBuilder.append((i == level - 1) ? "|" + prefix : "|    ");
+        }
+        return stringBuilder.toString();
+    }
+
     @Override
     public TraceStatus begin(final String message) {
         syncTraceId();
@@ -48,13 +56,5 @@ public class FieldLogTrace implements LogTrace {
     private void releaseTraceId() {
         if (this.traceIdHolder.isFirstLevel()) this.traceIdHolder = null;// destroy
         else this.traceIdHolder = this.traceIdHolder.createPreviousId();
-    }
-
-    private static String addSpace(final String prefix, final int level) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < level; i++) {
-            stringBuilder.append((i == level - 1) ? "|" + prefix : "|    ");
-        }
-        return stringBuilder.toString();
     }
 }

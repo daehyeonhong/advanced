@@ -5,6 +5,7 @@ import hello.advanced.app.trace.TraceStatus;
 import hello.advanced.app.trace.hellotrace.HelloTraceV2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import static hello.advanced.app.utility.Utility.sleep;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class OrderRepositoryV2 {
         try {
             status = this.trace.beginSync(traceId, "OrderRepository.request()");
             if (itemId.equals("ex")) throw new IllegalStateException("예외발생");
-            this.sleep();
+            sleep(1000);
             this.trace.end(status);
         } catch (final Exception exception) {
             this.trace.exception(status, exception);
@@ -25,12 +26,4 @@ public class OrderRepositoryV2 {
         }
     }
 
-    private void sleep() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
-    }
 }
