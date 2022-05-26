@@ -1,47 +1,53 @@
-package hello.advanced.app.trace.hellotrace;
+package hello.advanced.app.trace.logtrace;
 
 import hello.advanced.app.trace.TraceId;
 import hello.advanced.app.trace.TraceStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import static hello.advanced.app.common.enumerate.PREFIX.COMPLETE_PREFIX;
 import static hello.advanced.app.common.enumerate.PREFIX.EXCEPTION_PREFIX;
 import static hello.advanced.app.common.enumerate.PREFIX.START_PREFIX;
 
 @Slf4j
-@Component
-public class HelloTraceV2 {
+public class FieldLogTrace implements LogTrace {
+    private TraceId traceIdHolder;
 
+    @Override
     public TraceStatus begin(final String message) {
-        final TraceId traceId = new TraceId();
+        syncTraceId();
+        final TraceId traceId = this.traceIdHolder;
         final long startTimeMillis = System.currentTimeMillis();
         log.info("[{}] {}{}", traceId.getId(), addSpace(START_PREFIX.getValue(), traceId.getLevel()), message);
         return new TraceStatus(traceId, startTimeMillis, message);
     }
 
-    public TraceStatus beginSync(final TraceId beforeTraceId, final String message) {
-        final TraceId nextId = beforeTraceId.createNextId();
-        final long startTimeMillis = System.currentTimeMillis();
-        log.info("[{}] {}{}", nextId.getId(), addSpace(START_PREFIX.getValue(), nextId.getLevel()), message);
-        return new TraceStatus(nextId, startTimeMillis, message);
+    private void syncTraceId() {
+        if (this.traceIdHolder == null) this.traceIdHolder = new TraceId();
+        else this.traceIdHolder = this.traceIdHolder.createNextId();
     }
 
-    public void end(final TraceStatus traceStatus) {
-        this.complete(traceStatus, null);
+    @Override
+    public void end(final TraceStatus status) {
+        this.complete(status, null);
     }
 
-    public void exception(final TraceStatus traceStatus, final Exception exception) {
-        this.complete(traceStatus, exception);
+    @Override
+    public void exception(final TraceStatus status, final Exception exception) {
+        this.complete(status, exception);
     }
 
     private void complete(final TraceStatus traceStatus, final Exception exception) {
         final long resultTimeMillis = System.currentTimeMillis() - traceStatus.getStartTimeMillis();
         final TraceId traceId = traceStatus.getTraceId();
-        if (exception == null) {
+        if (exception == null)
             log.info("[{}] {}{} time={}ms", traceId.getId(), addSpace(COMPLETE_PREFIX.getValue(), traceId.getLevel()), traceStatus.getMessage(), resultTimeMillis);
-        } else {
+        else
             log.info("[{}] {}{} time={}ms exception={}", traceId.getId(), addSpace(EXCEPTION_PREFIX.getValue(), traceId.getLevel()), traceStatus.getMessage(), resultTimeMillis, exception);
-        }
+        this.releaseTraceId();
+    }
+
+    private void releaseTraceId() {
+        if (this.traceIdHolder.isFirstLevel()) this.traceIdHolder = null;// destroy
+        else this.traceIdHolder = this.traceIdHolder.createPreviousId();
     }
 
     private static String addSpace(final String prefix, final int level) {
