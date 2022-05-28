@@ -25,6 +25,30 @@ class TemplateMethodTest {
         template2.execute();
     }
 
+    /**
+     * Apply Template Method
+     */
+    @Test
+    void templateMethodV2() {
+        final AbstractMethod template1 = new AbstractMethod() {
+            @Override
+            protected void call() {
+                log.info("Business Logic1 Start");
+            }
+        };
+        template1.execute();
+        log.info("AnonymousInnerClass={}", template1);
+
+        final AbstractMethod template2 = new AbstractMethod() {
+            @Override
+            protected void call() {
+                log.info("Business Logic1 Start");
+            }
+        };
+        template2.execute();
+        log.info("AnonymousInnerClass={}", template2);
+    }
+
     private void logic1() {
         final long startTime = System.currentTimeMillis();
         log.info("Business Logic1 Start");
