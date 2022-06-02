@@ -1,6 +1,7 @@
 package hello.advanced.app.trace;
 
 import lombok.Getter;
+
 import java.util.UUID;
 
 @Getter

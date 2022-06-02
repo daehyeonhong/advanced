@@ -1,6 +1,7 @@
 package hello.advanced.app.trace.threadlocal.code;
 
 import lombok.extern.slf4j.Slf4j;
+
 import static hello.advanced.app.utility.Utility.sleep;
 
 @Slf4j

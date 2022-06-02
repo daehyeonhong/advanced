@@ -3,9 +3,8 @@ package hello.advanced.app.trace.logtrace;
 import hello.advanced.app.trace.TraceId;
 import hello.advanced.app.trace.TraceStatus;
 import lombok.extern.slf4j.Slf4j;
-import static hello.advanced.app.common.enumerate.PREFIX.COMPLETE_PREFIX;
-import static hello.advanced.app.common.enumerate.PREFIX.EXCEPTION_PREFIX;
-import static hello.advanced.app.common.enumerate.PREFIX.START_PREFIX;
+
+import static hello.advanced.app.common.enumerate.PREFIX.*;
 
 @Slf4j
 public class ThreadLocalLogTrace implements LogTrace {

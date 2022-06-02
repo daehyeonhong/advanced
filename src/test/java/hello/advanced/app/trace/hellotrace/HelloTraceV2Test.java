@@ -2,6 +2,7 @@ package hello.advanced.app.trace.hellotrace;
 
 import hello.advanced.app.trace.TraceStatus;
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HelloTraceV2Test {

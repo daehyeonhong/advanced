@@ -3,6 +3,7 @@ package hello.advanced.app.trace.threadlocal;
 import hello.advanced.app.trace.threadlocal.code.FieldService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
 import static hello.advanced.app.utility.Utility.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
 

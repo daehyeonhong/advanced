@@ -4,6 +4,7 @@ import hello.advanced.app.trace.logtrace.LogTrace;
 import hello.advanced.app.trace.template.AbstractTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
 import static hello.advanced.app.utility.Utility.sleep;
 
 @Repository
